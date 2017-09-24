@@ -62,5 +62,11 @@ public class EvalGreaterThanOrEqual implements Evaluatable {
 		}
 		return null;
 	}
+	
+
+	@Override
+	public String toString() {
+		return "EvalGreaterThanOrEqual[evalA=" + a + ", evalB=" + b + "]";
+	}
 
 }

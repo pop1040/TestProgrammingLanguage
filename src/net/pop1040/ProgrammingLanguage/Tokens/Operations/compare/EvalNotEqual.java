@@ -67,5 +67,10 @@ public class EvalNotEqual implements Evaluatable {
 		}if(valA instanceof PBoolean && valB instanceof PBoolean)return new PBoolean(valA.getBooleanValue() != valB.getBooleanValue());
 		return new PBoolean(true);
 	}
+	
+	@Override
+	public String toString() {
+		return "EvalNotEqual[evalA=" + a + ", evalB=" + b + "]";
+	}
 
 }

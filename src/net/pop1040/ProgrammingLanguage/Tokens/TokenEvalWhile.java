@@ -66,5 +66,10 @@ public class TokenEvalWhile extends Token implements Evaluatable, ScopableToken,
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return "TokenEvalWhile[conditional=" + conditional + "]";
+	}
 
 }

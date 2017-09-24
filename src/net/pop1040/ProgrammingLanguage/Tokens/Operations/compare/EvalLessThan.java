@@ -62,5 +62,11 @@ public class EvalLessThan implements Evaluatable {
 		}
 		return null;
 	}
+	
+
+	@Override
+	public String toString() {
+		return "EvalLessThan[evalA=" + a + ", evalB=" + b + "]";
+	}
 
 }
