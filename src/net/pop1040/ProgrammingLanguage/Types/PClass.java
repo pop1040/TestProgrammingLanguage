@@ -24,15 +24,15 @@ public class PClass extends PObject {
 
 	public ArrayList<Function> functions = new ArrayList<Function>();
 	public ArrayList<String> functionNames = new ArrayList<String>();
-	public HashMap<String, Function> functionMap = new HashMap<String, Function>();
+	public HashMap<FuncKey, Function> functionMap = new HashMap<FuncKey, Function>();
 
 	public ArrayList<IIntrinsicFunction> intrinsicFunctions = new ArrayList<IIntrinsicFunction>();
 	public ArrayList<String> intrinsicFunctionNames = new ArrayList<String>();
-	public HashMap<String, IIntrinsicFunction> intrinsicFunctionMap = new HashMap<String, IIntrinsicFunction>();
+	public HashMap<FuncKey, IIntrinsicFunction> intrinsicFunctionMap = new HashMap<FuncKey, IIntrinsicFunction>();
 	
 	public ArrayList<Method> methods = new ArrayList<Method>();
 	public ArrayList<String> methodNames = new ArrayList<String>();
-	public HashMap<String, Method> methodMap = new HashMap<String, Method>();
+	public HashMap<FuncKey, Method> methodMap = new HashMap<FuncKey, Method>();
 	public ArrayList<String> fieldNames = new ArrayList<String>();
 	
 	public Method[] getMethodArray(){
@@ -43,9 +43,9 @@ public class PClass extends PObject {
 		return methods;
 	}
 	
-	public HashMap<String, Method> getMethodMap(){
+	/*public HashMap<String, Method> getMethodMap(){
 		return methodMap;
-	}
+	}*/
 	
 	public ArrayList<String> getMethodNames(){
 		return methodNames;
@@ -87,9 +87,9 @@ public class PClass extends PObject {
 		return functions;
 	}
 	
-	public HashMap<String, Function> getFunctionMap(){
+	/*public HashMap<String, Function> getFunctionMap(){
 		return functionMap;
-	}
+	}*/
 	
 	public ArrayList<String> getFunctionNames(){
 		return functionNames;
@@ -115,9 +115,9 @@ public class PClass extends PObject {
 		return intrinsicFunctions;
 	}
 	
-	public HashMap<String, IIntrinsicFunction> getIntrinsicFunctionMap(){
+	/*public HashMap<String, IIntrinsicFunction> getIntrinsicFunctionMap(){
 		return intrinsicFunctionMap;
-	}
+	}*/
 	
 	public ArrayList<String> getIntrinsicFunctionNames(){
 		return intrinsicFunctionNames;
@@ -132,15 +132,15 @@ public class PClass extends PObject {
 
 
 
-	public void addFunction(String name, Function function) {
+	public void addFunction(Function function) {
 		functions.add(function);
-		functionMap.put(name, function);
-		functionNames.add(name);
+		functionMap.put(new FuncKey(function.getName(), function.getArgumentTypeNames()), function);
+		functionNames.add(function.getName());
 	}
 	
-	public void addIntrinsicFunction(String name, IIntrinsicFunction function) {
+	public void addIntrinsicFunction(String name, String[] arguments, IIntrinsicFunction function) {
 		intrinsicFunctions.add(function);
-		intrinsicFunctionMap.put(name, function);
+		intrinsicFunctionMap.put(new FuncKey(name, arguments), function);
 		intrinsicFunctionNames.add(name);
 	}
 	
@@ -148,23 +148,24 @@ public class PClass extends PObject {
 	/**
 	 * Gets a function by name, will recursively query the superclass
 	 * @param functionName
+	 * @param arguments 
 	 * @return the function mapped by that name in this class or if
 	 * that function is not mapped and this class has a superclass,
 	 * the result of calling getFunction on that superclass, otherwise
 	 * null
 	 */
-	public Function getFunction(String functionName) {
-		Function func = functionMap.get(functionName);
-		return func != null ? func : (superClass == null ? null : superClass.getFunction(functionName));
+	public Function getFunction(String functionName, String[] arguments) {
+		Function func = functionMap.get(new FuncKey(functionName, arguments));
+		return func != null ? func : (superClass == null ? null : superClass.getFunction(functionName, arguments));
 	}
 	/**
 	 * Gets a method by name, will recursively query the superclass
 	 * @param methodName
 	 * @return
 	 */
-	public Method getMethod(String methodName) {
-		Method mthd = methodMap.get(methodName);
-		return mthd != null ? mthd : (superClass == null ? null : superClass.getMethod(methodName));
+	public Method getMethod(String methodName, String[] arguments) {
+		Method mthd = methodMap.get(new FuncKey(methodName, arguments));
+		return mthd != null ? mthd : (superClass == null ? null : superClass.getMethod(methodName, arguments));
 	}
 	
 	/**
@@ -175,9 +176,45 @@ public class PClass extends PObject {
 	 * the result of calling getFunction on that superclass, otherwise
 	 * null
 	 */
-	public IIntrinsicFunction getIntrinsicFunction(String functionName) {
-		IIntrinsicFunction func = intrinsicFunctionMap.get(functionName);
-		return func != null ? func : (superClass == null ? null : superClass.getIntrinsicFunction(functionName));
+	public IIntrinsicFunction getIntrinsicFunction(String functionName, String[] arguments) {
+		IIntrinsicFunction func = intrinsicFunctionMap.get(new FuncKey(functionName, arguments));
+		return func != null ? func : (superClass == null ? null : superClass.getIntrinsicFunction(functionName, arguments));
+	}
+	
+	public static class FuncKey{
+		
+		String name;
+		String[] arguments;
+		
+		public FuncKey(String name, String[] arguments) {
+			this.name = name;
+			this.arguments = arguments;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(!(obj instanceof FuncKey))return false;
+			FuncKey key = (FuncKey) obj;
+			if(!name.equals(key.name))return false;
+			if(arguments==null || arguments.length==0)return key.arguments == null || key.arguments.length == 0;
+			if(key.arguments == null)return false;
+			if(arguments.length != key.arguments.length)return false;
+			for(int i=0; i<arguments.length; i++)if(!arguments[i].equals(key.arguments[i]))return false;
+			return true;
+		}
+		
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = name.hashCode();
+			
+			if(arguments == null)return result;
+			
+			for( String s : arguments)result = result * prime + s.hashCode();
+			
+			return result;
+		}
+		
 	}
 	
 	

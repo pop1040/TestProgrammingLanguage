@@ -24,11 +24,25 @@ public class Function implements Invokable{
 		this.executedToken=executedToken;
 		this.returnType=returnType;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	@Override
 	public ArrayList<Token> getTokens() {
 		//if(executedToken instanceof Subroutine) ((Subroutine) executedToken).getTokens();
 		return new ArrayList<Token>(Arrays.asList(executedToken));
+	}
+	
+	public String[] getArgumentNames(){
+		return argumentNames.toArray(new String[argumentNames.size()]);
+	}
+	
+	public String[] getArgumentTypeNames(){
+		String[] names = new String[argumentTypes.size()];
+		for(int i=0; i<names.length; i++)names[i]=argumentTypes.get(i).typeName;
+		return names;
 	}
 
 	@Override

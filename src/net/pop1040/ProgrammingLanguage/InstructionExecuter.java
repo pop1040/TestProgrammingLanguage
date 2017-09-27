@@ -1,5 +1,6 @@
 package net.pop1040.ProgrammingLanguage;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import net.pop1040.ProgrammingLanguage.FunctionStack.FunctionInstance;
 import net.pop1040.ProgrammingLanguage.FunctionStack.FunctionInstance.EvalTreeLayer;
@@ -150,40 +151,40 @@ public class InstructionExecuter {
 		
 	}
 
-	public void dumpState() {
-		System.out.println("-CurrentEvaluation:");
+	public void dumpState(PrintStream out) {
+		out.println("-CurrentEvaluation:");
 		if(!stack.stack.isEmpty()){
 			FunctionInstance inst = stack.stack.getLast();
-			System.out.println(" -Current Token:");
-			System.out.println("   -" + inst.function.getTokens().get(inst.execIndex));
-			System.out.println(" -Evaluation Tree:");
+			out.println(" -Current Token:");
+			out.println("   -" + inst.function.getTokens().get(inst.execIndex));
+			out.println(" -Evaluation Tree:");
 			int c=0;
 			for(EvalTreeLayer eval : inst.evaluationTree){
-				System.out.println("   -layer " + c++);
-				System.out.println("     -Eval=" + eval.obj);
-				System.out.println("     -Paramaters:");
-				for(int i=0; i<eval.paramaters.size(); i++)System.out.println("       -" + eval.paramaters.get(i));
+				out.println("   -layer " + c++);
+				out.println("     -Eval=" + eval.obj);
+				out.println("     -Paramaters:");
+				for(int i=0; i<eval.paramaters.size(); i++)out.println("       -" + eval.paramaters.get(i));
 			}
 			
 		}
-		System.out.println("-Instruction Stack State:");
+		out.println("-Instruction Stack State:");
 		int i=0;
 		for(FunctionInstance inst : stack.stack){
-			System.out.println(" -[" + i + "]:" + inst.toString());
+			out.println(" -[" + i + "]:" + inst.toString());
 			//System.out.println("  -index: " + executionIndex.get(i));
-			System.out.println("  -index: " + inst.execIndex);
-			printTokens(inst.function.getTokens(), 2);
+			out.println("  -index: " + inst.execIndex);
+			printTokens(inst.function.getTokens(), 2, out);
 			i++;
 		}
 	}
 	
-	private static void printTokens(ArrayList<Token> list, int offset){
-		for(int i=0; i<offset; i++)System.out.print(" ");
-		System.out.println("\\elements [length=" + list.size() + "]");
+	private static void printTokens(ArrayList<Token> list, int offset, PrintStream out){
+		for(int i=0; i<offset; i++)out.print(" ");
+		out.println("\\elements [length=" + list.size() + "]");
 		for(Token token : list){
-			for(int i=0; i<offset+1; i++)System.out.print(" ");
-			System.out.println("-" + token);
-			if(token instanceof ScopableToken)printTokens(((ScopableToken) token).getTokens(), offset+2);
+			for(int i=0; i<offset+1; i++)out.print(" ");
+			out.println("-" + token);
+			if(token instanceof ScopableToken)printTokens(((ScopableToken) token).getTokens(), offset+2, out);
 		}
 	}
 	

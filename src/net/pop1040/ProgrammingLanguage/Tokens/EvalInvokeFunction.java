@@ -33,12 +33,12 @@ public class EvalInvokeFunction implements Invokable{
 		}
 		if(functionRef.mode == Type.FUNCTION){
 			//funcInstance = clazz.functionMap.get(functionRef.functionName);
-			funcInstance = clazz.getFunction(functionRef.functionName);
+			funcInstance = clazz.getFunction(functionRef.functionName, functionRef.arguments);
 		}else if(functionRef.mode == Type.METHOD){ //I was going to just use else but this is better for the future
-			funcInstance = clazz.getMethod(functionRef.functionName);
+			funcInstance = clazz.getMethod(functionRef.functionName, functionRef.arguments);
 			//funcInstance = clazz.methodMap.get(functionRef.functionName);
 		}else if(functionRef.mode == Type.INTRINSIC){
-			iFuncInstance = clazz.getIntrinsicFunction(functionRef.functionName);
+			iFuncInstance = clazz.getIntrinsicFunction(functionRef.functionName, functionRef.arguments);
 		}
 		//}
 	}

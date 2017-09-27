@@ -1,5 +1,6 @@
 package net.pop1040.ProgrammingLanguage;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -125,16 +126,16 @@ public class FunctionStack {
 		stack.add(new FunctionInstance(start));
 	}
 
-	public void dumpState() {
-		System.out.println("-Stack state:");
+	public void dumpState(PrintStream out) {
+		out.println("-Stack state:");
 		for(int i=0; i<stack.size(); i++){
 			FunctionInstance inst = stack.get(i);
-			System.out.println(" -Layer " + i + ":");
-			System.out.println("  -subroutine: " + inst.function);
-			System.out.println("  -return state: " + inst.returnState);
-			System.out.println("  -return variable: " + inst.returnValue);
-			System.out.println("  -values:");
-			for(int j=0; j<inst.localVariableNames.size(); j++)System.out.println("   -name:" + inst.localVariableNames.get(j) + ", value:" + inst.localVariableMap.get(inst.localVariableNames.get(j)));
+			out.println(" -Layer " + i + ":");
+			out.println("  -subroutine: " + inst.function);
+			out.println("  -return state: " + inst.returnState);
+			out.println("  -return variable: " + inst.returnValue);
+			out.println("  -values:");
+			for(int j=0; j<inst.localVariableNames.size(); j++)out.println("   -name:" + inst.localVariableNames.get(j) + ", value:" + inst.localVariableMap.get(inst.localVariableNames.get(j)));
 		}
 	}
 

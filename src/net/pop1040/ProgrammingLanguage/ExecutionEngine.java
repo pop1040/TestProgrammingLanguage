@@ -1,5 +1,6 @@
 package net.pop1040.ProgrammingLanguage;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 import net.pop1040.ProgrammingLanguage.Types.PClass;
@@ -16,10 +17,10 @@ public class ExecutionEngine {
 	static{
 		PClass math = new PClass("Math");
 		baseClasses.add(math);
-		math.addIntrinsicFunction("pow", (FunctionStack stack, ArrayList<PGeneric> evaluated)->{
+		math.addIntrinsicFunction("pow", new String[]{PDouble.pClass.typeName, PDouble.pClass.typeName}, (FunctionStack stack, ArrayList<PGeneric> evaluated)->{
 			return new PDouble(Math.pow(((PPrimitive)evaluated.get(0)).getDoubleValue(), ((PPrimitive)evaluated.get(1)).getDoubleValue()));
 		});
-		math.addIntrinsicFunction("sqrt", (FunctionStack stack, ArrayList<PGeneric> evaluated)->{
+		math.addIntrinsicFunction("sqrt", new String[]{PDouble.pClass.typeName}, (FunctionStack stack, ArrayList<PGeneric> evaluated)->{
 			return new PDouble(Math.sqrt(((PPrimitive)evaluated.get(0)).getDoubleValue()));
 		});
 		
@@ -54,7 +55,8 @@ public class ExecutionEngine {
 	}
 	
 	public void start(String startingFunction){
-		stack = new FunctionStack(startingClass.getFunctionMap().get(startingFunction));
+		//stack = new FunctionStack(startingClass.getFunctionMap().get(startingFunction));
+		stack = new FunctionStack(startingClass.getFunction(startingFunction, null));
 		instructionPointer = new InstructionExecuter(stack, this);
 	}
 	
@@ -63,11 +65,11 @@ public class ExecutionEngine {
 	}
 
 
-	public void dumpState() {
+	public void dumpState(PrintStream out) {
 		
-		System.out.println("Current State:");
-		stack.dumpState();
-		instructionPointer.dumpState();
+		out.println("Current State:");
+		stack.dumpState(out);
+		instructionPointer.dumpState(out);
 		
 		
 	}
