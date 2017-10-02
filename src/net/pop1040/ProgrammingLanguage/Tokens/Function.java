@@ -85,7 +85,7 @@ public class Function implements Invokable{
 	@Override
 	public void setup(FunctionStack stack, FunctionInstance inst, ArrayList<PGeneric> evaluated) {
 		FunctionStack.FunctionInstance functionInstance;
-		stack.stack.add(functionInstance = new FunctionStack.FunctionInstance(this));
+		stack.stack.add(functionInstance = new FunctionStack.FunctionInstance(this)); //wait why did I set this up like this?
 		//System.out.println("evaluated Size = " + evaluated.size());
 		for(int i=0; i<evaluated.size(); i++)functionInstance.addVariable(argumentNames.get(i), evaluated.get(i));
 	}

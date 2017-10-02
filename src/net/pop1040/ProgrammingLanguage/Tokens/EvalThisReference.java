@@ -16,7 +16,7 @@ public class EvalThisReference implements Evaluatable {
 
 	@Override
 	public PClass getEvaluatedType() {
-		return method.getObject().getPClass();
+		return method.getPClass();
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class EvalThisReference implements Evaluatable {
 
 	@Override
 	public PGeneric getReturnValue(FunctionStack stack, ArrayList<PGeneric> evaluated) {
-		return method.getObject();
+		return method.getObject(stack);
 	}
 
 }

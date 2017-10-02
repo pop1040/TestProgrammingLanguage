@@ -30,7 +30,7 @@ public class TokenReturn extends Token implements ScopeInterupter, Evaluatable{
 			counter++;
 			if(inst.getFunction() instanceof Function)return counter;
 		}
-		throw new NullPointerException("");
+		throw new NullPointerException("reached end of stack, no function found cannot return");
 	}
 
 	@Override

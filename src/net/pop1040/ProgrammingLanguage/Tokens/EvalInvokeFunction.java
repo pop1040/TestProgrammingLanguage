@@ -51,10 +51,13 @@ public class EvalInvokeFunction implements Invokable{
 	@Override
 	public Evaluatable getNextEvaluatable(ArrayList<PClass> classes, ArrayList<PGeneric> evaluated) {
 		//if(function.mode != Type.INTRINSIC){
-			if(evaluated.size()>=arguments.size())return null;
-			return arguments.get(evaluated.size());
-		//}
-		//return null;
+		if(function.mode == Type.METHOD){
+			if(evaluated.size() == 0)return function.object;
+			if(evaluated.size()>arguments.size())return null;
+			return arguments.get(evaluated.size()-1);
+		}
+		if(evaluated.size()>=arguments.size())return null;
+		return arguments.get(evaluated.size());
 	}
 
 	@Override
@@ -91,7 +94,7 @@ public class EvalInvokeFunction implements Invokable{
 	@Override
 	public void setup(FunctionStack stack, FunctionInstance inst, ArrayList<PGeneric> evaluated) {
 		//instFrame = inst;
-		if(function.mode != Type.INTRINSIC){
+		if(function.mode != Type.INTRINSIC){  //methods receive the this reference as the first element in evaluated
 			funcInstance.setup(stack, inst, evaluated);
 		}
 	}

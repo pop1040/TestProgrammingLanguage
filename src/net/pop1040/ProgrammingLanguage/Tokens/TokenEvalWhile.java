@@ -11,8 +11,8 @@ import net.pop1040.ProgrammingLanguage.Types.PClass;
 import net.pop1040.ProgrammingLanguage.Types.PGeneric;
 
 public class TokenEvalWhile extends Token implements Evaluatable, ScopableToken, ILoopable{
-
-
+	
+	//TODO add do-while implementation
 	Evaluatable conditional;
 	Token executedToken;
 	
