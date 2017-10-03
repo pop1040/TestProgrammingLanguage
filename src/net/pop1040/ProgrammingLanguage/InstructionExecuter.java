@@ -71,7 +71,10 @@ public class InstructionExecuter {
 					if(evaluatingObject != currentToken){
 						cStackInstance.evaluationTree.removeLast();
 						cStackInstance.evaluationTree.getLast().paramaters.add(evaluatingObject.getReturnValue(stack, inputs)); //TODO probably gonna change this
-					}else cStackInstance.evaluationTree.removeLast();
+					}else{
+						evaluatingObject.getReturnValue(stack, inputs); //so root level function calls work with intrinsics
+						cStackInstance.evaluationTree.removeLast();
+					}
 				}else{
 					//System.out.println("cannot return, setting up (param size = " + evaluatingObjectLayer.paramaters.size() + ")");
 					((Invokable) evaluatingObject).setup(stack, cStackInstance, evaluatingObjectLayer.paramaters);

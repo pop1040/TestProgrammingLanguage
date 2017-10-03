@@ -7,7 +7,7 @@ public class PObject extends PGeneric {
 	
 	private PClass pClass;
 	
-	protected PObject(PClass pClass) {
+	public PObject(PClass pClass) {
 		this.pClass=pClass;
 	}
 	

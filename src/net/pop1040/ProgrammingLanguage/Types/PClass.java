@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.pop1040.ProgrammingLanguage.ExecutionEngine;
+import net.pop1040.ProgrammingLanguage.Tokens.Constructor;
 import net.pop1040.ProgrammingLanguage.Tokens.Function;
 import net.pop1040.ProgrammingLanguage.Tokens.IIntrinsicFunction;
 import net.pop1040.ProgrammingLanguage.Tokens.Method;
@@ -33,7 +34,15 @@ public class PClass extends PObject {
 	public ArrayList<Method> methods = new ArrayList<Method>();
 	public ArrayList<String> methodNames = new ArrayList<String>();
 	public HashMap<FuncKey, Method> methodMap = new HashMap<FuncKey, Method>();
+	
 	public ArrayList<String> fieldNames = new ArrayList<String>();
+	public HashMap<String, PClass> fieldClasses = new HashMap<String, PClass>();
+	
+	public HashMap<String[], Constructor> constructors = new HashMap<String[], Constructor>();
+	
+	public Constructor getConstructor(String[] arguments) {
+		return constructors.get(arguments);
+	}
 	
 	public Method[] getMethodArray(){
 		return getMethods().toArray(new Method[getMethods().size()]);
@@ -215,6 +224,10 @@ public class PClass extends PObject {
 			return result;
 		}
 		
+	}
+
+	public void addConstructor(Constructor constructor) {
+		constructors.put(constructor.getArgumentTypeNames(), constructor);
 	}
 	
 	

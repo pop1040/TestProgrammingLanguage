@@ -7,6 +7,7 @@ public class FunctionReference {
 	public static enum Type{
 		FUNCTION,
 		METHOD,
+		CONSTRUCTOR,
 		INTRINSIC
 	}
 	
@@ -16,6 +17,13 @@ public class FunctionReference {
 	public Evaluatable object;
 	public String className;
 	public PClass returnType;
+	
+	public FunctionReference(PClass returnType, String className, String ... arguments) {
+		this.mode = Type.CONSTRUCTOR;
+		this.className = className;
+		this.returnType = returnType;
+		this.arguments = arguments;
+	}
 	
 	public FunctionReference(String functionName, String className, PClass returnType, String ... arguments) {
 		this.mode = Type.FUNCTION;

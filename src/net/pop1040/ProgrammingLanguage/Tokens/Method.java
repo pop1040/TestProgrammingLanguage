@@ -26,9 +26,15 @@ public class Method extends Function {
 		Iterator<FunctionInstance> iter = stack.stack.descendingIterator();
 		while(iter.hasNext()){
 			FunctionInstance inst = iter.next();
-			if(inst.getFunction() instanceof Function)inst.getMethodObject();
+			if(inst.getFunction() instanceof Method)inst.getMethodObject();
 		}
 		throw new NullPointerException("reached end of stack, no function found cannot return");
+	}
+	
+	public Method addArgument(String name, PClass type){
+		argumentNames.add(name);
+		argumentTypes.add(type);
+		return this;
 	}
 	
 	@Override
@@ -39,6 +45,9 @@ public class Method extends Function {
 		for(int i=1; i<evaluated.size(); i++)functionInstance.addVariable(argumentNames.get(i), evaluated.get(i));
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "Method[name=" + name + ", class=" + hostClass + ", ReturnType=" + returnType + "]";
+	}
 
 }

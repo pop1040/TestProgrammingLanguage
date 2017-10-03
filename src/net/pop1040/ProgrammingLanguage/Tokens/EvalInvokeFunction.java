@@ -5,11 +5,12 @@ import java.util.List;
 
 import net.pop1040.ProgrammingLanguage.FunctionStack;
 import net.pop1040.ProgrammingLanguage.FunctionStack.FunctionInstance;
+import net.pop1040.ProgrammingLanguage.InstructionExecuter;
 import net.pop1040.ProgrammingLanguage.Tokens.FunctionReference.Type;
 import net.pop1040.ProgrammingLanguage.Types.PClass;
 import net.pop1040.ProgrammingLanguage.Types.PGeneric;
 
-public class EvalInvokeFunction implements Invokable{
+public class EvalInvokeFunction extends Token implements Invokable{
 	
 	public FunctionReference function;
 	public Function funcInstance;
@@ -31,15 +32,25 @@ public class EvalInvokeFunction implements Invokable{
 			clazz = iter;
 			break;
 		}
+		switch(functionRef.mode){
+		case CONSTRUCTOR: funcInstance = clazz.getConstructor(functionRef.arguments); break;
+		case FUNCTION: funcInstance = clazz.getFunction(functionRef.functionName, functionRef.arguments); break;
+		case INTRINSIC: iFuncInstance = clazz.getIntrinsicFunction(functionRef.functionName, functionRef.arguments); break;
+		case METHOD: funcInstance = clazz.getMethod(functionRef.functionName, functionRef.arguments); break;
+		
+		}
+		/*
 		if(functionRef.mode == Type.FUNCTION){
 			//funcInstance = clazz.functionMap.get(functionRef.functionName);
 			funcInstance = clazz.getFunction(functionRef.functionName, functionRef.arguments);
-		}else if(functionRef.mode == Type.METHOD){ //I was going to just use else but this is better for the future
+		}else if(functionRef.mode == Type.METHOD){
 			funcInstance = clazz.getMethod(functionRef.functionName, functionRef.arguments);
 			//funcInstance = clazz.methodMap.get(functionRef.functionName);
+		}else if(functionRef.mode == Type.CONSTRUCTOR){
+			funcInstance = clazz.getConstructor(functionRef.arguments);
 		}else if(functionRef.mode == Type.INTRINSIC){
 			iFuncInstance = clazz.getIntrinsicFunction(functionRef.functionName, functionRef.arguments);
-		}
+		}*/
 		//}
 	}
 
@@ -104,6 +115,11 @@ public class EvalInvokeFunction implements Invokable{
 		String ret = "EvalInvokeFunction[" + (function.mode == Type.INTRINSIC?"IntrinsicFunction = " + function.functionName + ", class=" + function.className:"Function = " + funcInstance.toString()) + ", Arguments={";
 		for(int i=0; i<arguments.size(); i++)ret = ret + "Arg" + i + "=" + arguments.get(i) + (i==arguments.size()-1?"":", ");
 		return ret + "}]";
+	}
+
+	@Override
+	public void run(FunctionStack stack, InstructionExecuter instructionPointer, ArrayList<PGeneric> values) {
+		
 	}
 
 }

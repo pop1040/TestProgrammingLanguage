@@ -19,6 +19,8 @@ public class TestRunner {
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		PClass simpleClass = new PClass("TestClass");
+		PClass car = new PClass("Car");
+		
 		ExecutionEngine engine = new ExecutionEngine(simpleClass);
 		
 		Subroutine main = new Subroutine();
@@ -34,6 +36,13 @@ public class TestRunner {
 		
 		Subroutine testFunc1 = new Subroutine();
 		Subroutine testFunc2 = new Subroutine();
+		
+		Subroutine carConstructor = new Subroutine();
+		
+		Constructor constructor;
+		car.addConstructor(constructor = new Constructor(carConstructor, car).addArgument("wheelSize", PInteger.pClass));
+		carConstructor.tokens.add(new TokenSetVarValue(new VariableReference("wheelSize", PInteger.pClass, new EvalThisReference(constructor)), new EvalGetVariable(new VariableReference("wheelSize", PInteger.pClass))));
+		
 		
 		simpleClass.addFunction(new Function("main", main, PClass.pVoid));
 		
@@ -76,8 +85,8 @@ public class TestRunner {
 		
 		main.tokens.add(new TokenDeclareLocalVariable("counter", PInteger.pClass, new EvalConstant(new PInteger(1))));
 		main.tokens.add(new TokenEvalWhile(new EvalNotEqual(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalConstant(new PInteger(10))), loop));
-		
-		main.tokens.add(new TokenSetVarValue(new VariableReference("x", PInteger.pClass), new EvalConstant(new PInteger(25))));
+		main.tokens.add(new EvalInvokeFunction(new FunctionReference("exit", null, "System", PInteger.pClass.typeName), engine.classes, new EvalConstant(new PInteger(1))));
+		main.tokens.add(new TokenSetVarValue(new VariableReference("x", PInteger.pClass), new EvalConstant(new PInteger(99999))));
 		//main.tokens.add(new Subroutine());
 		
 		//File logFile = new File("log.txt");
@@ -85,7 +94,7 @@ public class TestRunner {
 		
 		//PrintStream fileOut = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFile), 67108864));
 		
-		engine.initProgramData();
+		//engine.initProgramData();
 		engine.start("main");
 		long counter = 1;
 		
@@ -109,7 +118,7 @@ public class TestRunner {
 			//if(counter == 135){
 			//	System.out.println("<--------------Done! Took " + (System.currentTimeMillis()-time) + " milliseconds-------------->");
 				System.out.println("<----------------- Step " + counter + " ---------------->");
-				if(engine.instructionPointer.haulted)System.out.println("<--------------Done! Took " + (System.currentTimeMillis()-time) + " milliseconds-------------->");
+				if(engine.instructionPointer.haulted)System.out.println("<--------------Done! Took " + (System.currentTimeMillis()-time) + " milliseconds (exit code = " + engine.exitCode + ")-------------->");
 				engine.dumpState(System.out);
 			//}
 			counter++;
