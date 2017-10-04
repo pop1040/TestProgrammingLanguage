@@ -10,6 +10,8 @@ import net.pop1040.ProgrammingLanguage.Types.PGeneric;
 import net.pop1040.ProgrammingLanguage.Types.PObject;
 
 public class Constructor extends Method {
+	
+	Token ret = new TokenReturn(new EvalThisReference(this));
 
 	public Constructor(Token executedToken, PClass clazz) {
 		super("constructor", executedToken, clazz, clazz);
@@ -23,7 +25,7 @@ public class Constructor extends Method {
 	
 	@Override
 	public ArrayList<Token> getTokens() {
-		return new ArrayList<Token>(Arrays.asList(executedToken, new TokenReturn(new EvalThisReference(this))));
+		return new ArrayList<Token>(Arrays.asList(executedToken, ret));
 	}
 	
 	
@@ -31,11 +33,15 @@ public class Constructor extends Method {
 	public void setup(FunctionStack stack, FunctionInstance inst, ArrayList<PGeneric> evaluated) {
 		
 		PObject object = new PObject(hostClass);
+		for(String s : hostClass.fieldNames){
+			object.fieldMap.put(s, null);
+			object.fields.add(null);
+		}
 		
 		FunctionStack.FunctionInstance functionInstance = new FunctionStack.FunctionInstance(this, object);
 		stack.stack.add(functionInstance); //much better
 		
-		for(int i=1; i<evaluated.size(); i++)functionInstance.addVariable(argumentNames.get(i), evaluated.get(i));
+		for(int i=0; i<evaluated.size(); i++)functionInstance.addVariable(argumentNames.get(i), evaluated.get(i));
 	}
 	
 	@Override

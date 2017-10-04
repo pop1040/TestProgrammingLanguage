@@ -17,11 +17,32 @@ import net.pop1040.ProgrammingLanguage.Types.*;
 public class TestRunner {
 
 	public static void main(String[] args) throws FileNotFoundException {
+		/*
+		PrintStream dummyStream = new PrintStream(new OutputStream(){
+		    public void write(int b) {
+		        // NO-OP
+		    }
+		});
+
+		System.setOut(dummyStream);*/
+		System.setErr(System.out); //because errors in the middle of the log are annoying
 		
 		PClass simpleClass = new PClass("TestClass");
 		PClass car = new PClass("Car");
+		PClass linkedList = new PClass("LinkedList");
+		PClass linkedListElement = new PClass("LinkedList.Element");
+		
+		car.fieldNames.add("wheelSize");
+		
+		linkedList.fieldNames.add("headNode");
+
+		linkedListElement.fieldNames.add("element");
+		linkedListElement.fieldNames.add("next");
 		
 		ExecutionEngine engine = new ExecutionEngine(simpleClass);
+		engine.addClass(car);
+		engine.addClass(linkedList);
+		engine.addClass(linkedListElement);
 		
 		Subroutine main = new Subroutine();
 		Subroutine square = new Subroutine();
@@ -59,10 +80,40 @@ public class TestRunner {
 		simpleClass.addFunction(new Function("test", testFunc2, PInteger.pClass).addArgument("x", PInteger.pClass));
 		testFunc2.tokens.add(new TokenReturn(new EvalGetVariable(new VariableReference("x", PInteger.pClass))));
 		
+		{
+			linkedList.addConstructor(new Constructor(new Subroutine(), linkedList));
+			
+			Subroutine size = new Subroutine();
+			Method sizeMethod = new Method("size", size, linkedList, PInteger.pClass);
+			linkedList.addMethod(sizeMethod);
+			size.tokens.add(new TokenDeclareLocalVariable("currentHead", linkedListElement, new EvalGetVariable(new VariableReference("headNode", linkedListElement, new EvalThisReference(sizeMethod)))));
+			//size.tokens.add(new TokenEvalIf(new EvalEqual(new EvalGetVariable(new VariableReference("currentHead", linkedListElement)), new EvalConstant(null)), new TokenReturn(new EvalConstant(new PInteger(0)))));
+			size.tokens.add(new TokenDeclareLocalVariable("counter", PInteger.pClass, new EvalConstant(new PInteger(0))));
+			{
+				Subroutine whileLoop = new Subroutine();
+				//size.tokens.add(new TokenEvalWhile(new EvalNotEqual(new EvalGetVariable(new VariableReference("next", linkedListElement, new EvalGetVariable(new VariableReference("currentHead", linkedListElement)))), new EvalConstant(null)), whileLoop));
+				//whileLoop.tokens.add(new TokenSetVarValue(new VariableReference("currentHead", linkedListElement), new EvalGetVariable(new VariableReference("next", linkedListElement, new EvalGetVariable(new VariableReference("currentHead", linkedListElement))))));
+				//whileLoop.tokens.add(new TokenSetVarValue(new VariableReference("counter", PInteger.pClass), new EvalAddInteger(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalConstant(new PInteger(1)))));
+				size.tokens.add(new TokenEvalWhile(new EvalNotEqual(new EvalGetVariable(new VariableReference("currentHead", linkedListElement)), new EvalConstant(null)), whileLoop));
+				whileLoop.tokens.add(new TokenSetVarValue(new VariableReference("currentHead", linkedListElement), new EvalGetVariable(new VariableReference("next", linkedListElement, new EvalGetVariable(new VariableReference("currentHead", linkedListElement))))));
+				whileLoop.tokens.add(new TokenSetVarValue(new VariableReference("counter", PInteger.pClass), new EvalAddInteger(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalConstant(new PInteger(1)))));
+			}
+			size.tokens.add(new TokenReturn(new EvalGetVariable(new VariableReference("counter", PInteger.pClass))));
+			
+			Subroutine getLast = new Subroutine();
+			Method getLastMethod = new Method("getLast", getLast, linkedList, PInteger.pClass);
+			linkedList.addMethod(getLastMethod);
+			getLast.tokens.add(new TokenDeclareLocalVariable("currentHead", linkedListElement, new EvalGetVariable(new VariableReference("headNode", linkedListElement, new EvalThisReference(sizeMethod)))));
+			getLast.tokens.add(new TokenEvalIf(new EvalEqual(new EvalGetVariable(new VariableReference("currentHead", linkedListElement)), new EvalConstant(null)), new TokenReturn(new EvalConstant(null))));
+			getLast.tokens.add(new TokenEvalWhile(new EvalNotEqual(new EvalGetVariable(new VariableReference("next", linkedListElement, new EvalGetVariable(new VariableReference("currentHead", linkedListElement)))), new EvalConstant(null)), new TokenSetVarValue(new VariableReference("currentHead", linkedListElement), new EvalGetVariable(new VariableReference("next", linkedListElement, new EvalGetVariable(new VariableReference("currentHead", linkedListElement)))))));
+			getLast.tokens.add(new TokenReturn(new EvalGetVariable(new VariableReference("currentHead", linkedListElement))));
+			
+		}
+		
+		
 		evalYes.tokens.add(new TokenSetVarValue(new VariableReference("result", PChar.pClass), new EvalConstant(new PChar('T'))));
 		evalNo.tokens.add(new TokenSetVarValue(new VariableReference("result", PChar.pClass), new EvalConstant(new PChar('F'))));
 		
-		loop.tokens.add(new TokenSetVarValue(new VariableReference("counter", PInteger.pClass), new EvalAddInteger(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalConstant(new PInteger(1)))));
 		
 		main.tokens.add(new TokenDeclareLocalVariable("x", PInteger.pClass, new EvalConstant(new PInteger(7))));
 		main.tokens.add(new TokenDeclareLocalVariable("global t", PInteger.pClass, new EvalConstant(new PInteger(-1))));
@@ -85,6 +136,11 @@ public class TestRunner {
 		
 		main.tokens.add(new TokenDeclareLocalVariable("counter", PInteger.pClass, new EvalConstant(new PInteger(1))));
 		main.tokens.add(new TokenEvalWhile(new EvalNotEqual(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalConstant(new PInteger(10))), loop));
+		loop.tokens.add(new TokenSetVarValue(new VariableReference("counter", PInteger.pClass), new EvalAddInteger(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalConstant(new PInteger(1)))));
+		
+		main.tokens.add(new TokenDeclareLocalVariable("carInstance", car, new EvalInvokeFunction(new FunctionReference(car, PInteger.pClass.typeName), engine.classes, new EvalConstant(new PInteger(113)))));
+		
+		
 		main.tokens.add(new EvalInvokeFunction(new FunctionReference("exit", null, "System", PInteger.pClass.typeName), engine.classes, new EvalConstant(new PInteger(1))));
 		main.tokens.add(new TokenSetVarValue(new VariableReference("x", PInteger.pClass), new EvalConstant(new PInteger(99999))));
 		//main.tokens.add(new Subroutine());

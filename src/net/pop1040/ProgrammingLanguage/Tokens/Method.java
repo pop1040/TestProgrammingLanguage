@@ -26,7 +26,7 @@ public class Method extends Function {
 		Iterator<FunctionInstance> iter = stack.stack.descendingIterator();
 		while(iter.hasNext()){
 			FunctionInstance inst = iter.next();
-			if(inst.getFunction() instanceof Method)inst.getMethodObject();
+			if(inst.getFunction() instanceof Method)return inst.getMethodObject();
 		}
 		throw new NullPointerException("reached end of stack, no function found cannot return");
 	}

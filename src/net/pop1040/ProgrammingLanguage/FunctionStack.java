@@ -54,6 +54,17 @@ public class FunctionStack {
 				this.obj = par;
 				paramaters = new ArrayList<PGeneric>();
 			}
+			
+			@Override
+			public String toString() {
+				StringBuilder buf = new StringBuilder("EvalTreeLayer[eval=");
+				buf.append(String.valueOf(obj));
+				buf.append(", paramaters={");
+				for(PGeneric iter : paramaters)buf.append(iter + ", ");
+				if(paramaters != null && !paramaters.isEmpty())buf.setLength(buf.length()-2);
+				buf.append("}]");
+				return buf.toString();
+			}
 		}
 		
 		

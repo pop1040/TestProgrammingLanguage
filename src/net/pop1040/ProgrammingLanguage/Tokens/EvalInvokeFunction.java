@@ -37,7 +37,9 @@ public class EvalInvokeFunction extends Token implements Invokable{
 		case FUNCTION: funcInstance = clazz.getFunction(functionRef.functionName, functionRef.arguments); break;
 		case INTRINSIC: iFuncInstance = clazz.getIntrinsicFunction(functionRef.functionName, functionRef.arguments); break;
 		case METHOD: funcInstance = clazz.getMethod(functionRef.functionName, functionRef.arguments); break;
-		
+		}
+		if(functionRef.mode == Type.CONSTRUCTOR){
+			System.out.println("Arguments");
 		}
 		/*
 		if(functionRef.mode == Type.FUNCTION){
@@ -112,6 +114,13 @@ public class EvalInvokeFunction extends Token implements Invokable{
 	
 	@Override
 	public String toString() {
+		//System.out.println("<===============>");
+		//System.out.println(String.valueOf(function));
+		//System.out.println(String.valueOf(funcInstance));
+		//System.out.println("<===============>");
+		//System.out.println(String.valueOf(function.mode));
+		//System.out.println(String.valueOf(function.functionName));
+		//System.out.println(String.valueOf(funcInstance));
 		String ret = "EvalInvokeFunction[" + (function.mode == Type.INTRINSIC?"IntrinsicFunction = " + function.functionName + ", class=" + function.className:"Function = " + funcInstance.toString()) + ", Arguments={";
 		for(int i=0; i<arguments.size(); i++)ret = ret + "Arg" + i + "=" + arguments.get(i) + (i==arguments.size()-1?"":", ");
 		return ret + "}]";

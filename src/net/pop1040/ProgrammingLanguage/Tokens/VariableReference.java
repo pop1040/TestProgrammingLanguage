@@ -13,13 +13,24 @@ public class VariableReference{
 	public String name;
 	public Evaluatable object;
 	public PClass type;
-	
+	/**
+	 * Variable Reference for LOCAL
+	 * @param name
+	 * @param type
+	 * @param object
+	 */
 	public VariableReference(String name, PClass type){
 		this.mode=Type.LOCAL;
 		this.name=name;
 		this.type=type;
 	}
 	
+	/**
+	 * Variable Reference for FIELD
+	 * @param name
+	 * @param type
+	 * @param object
+	 */
 	public VariableReference(String name, PClass type, Evaluatable object){
 		this.mode=Type.FIELD;
 		this.name=name;

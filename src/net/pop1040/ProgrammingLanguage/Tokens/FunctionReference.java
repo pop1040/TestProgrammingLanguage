@@ -18,10 +18,10 @@ public class FunctionReference {
 	public String className;
 	public PClass returnType;
 	
-	public FunctionReference(PClass returnType, String className, String ... arguments) {
+	public FunctionReference(PClass clazz, String ... arguments) {
 		this.mode = Type.CONSTRUCTOR;
-		this.className = className;
-		this.returnType = returnType;
+		this.className = clazz.typeName;
+		this.returnType = clazz;
 		this.arguments = arguments;
 	}
 	

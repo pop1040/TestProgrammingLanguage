@@ -77,6 +77,10 @@ public class ExecutionEngine {
 		
 	}
 	
+	public void addClass(PClass clazz){
+		classes.add(clazz);
+	}
+	
 	public void start(String startingFunction){
 		//stack = new FunctionStack(startingClass.getFunctionMap().get(startingFunction));
 		stack = new FunctionStack(startingClass.getFunction(startingFunction, null));

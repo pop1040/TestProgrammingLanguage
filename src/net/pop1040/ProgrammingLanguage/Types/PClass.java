@@ -38,10 +38,10 @@ public class PClass extends PObject {
 	public ArrayList<String> fieldNames = new ArrayList<String>();
 	public HashMap<String, PClass> fieldClasses = new HashMap<String, PClass>();
 	
-	public HashMap<String[], Constructor> constructors = new HashMap<String[], Constructor>();
+	public HashMap<FuncKey, Constructor> constructors = new HashMap<FuncKey, Constructor>();
 	
 	public Constructor getConstructor(String[] arguments) {
-		return constructors.get(arguments);
+		return constructors.get(new FuncKey("", arguments));
 	}
 	
 	public Method[] getMethodArray(){
@@ -153,6 +153,12 @@ public class PClass extends PObject {
 		intrinsicFunctionNames.add(name);
 	}
 	
+	public void addMethod(Method method){
+		methods.add(method);
+		methodNames.add(method.getName());
+		methodMap.put(new FuncKey(method.getName(), method.getArgumentTypeNames()), method);
+	}
+	
 	
 	/**
 	 * Gets a function by name, will recursively query the superclass
@@ -227,7 +233,7 @@ public class PClass extends PObject {
 	}
 
 	public void addConstructor(Constructor constructor) {
-		constructors.put(constructor.getArgumentTypeNames(), constructor);
+		constructors.put(new FuncKey("",constructor.getArgumentTypeNames()), constructor);
 	}
 	
 	
