@@ -7,6 +7,9 @@ import net.pop1040.ProgrammingLanguage.FunctionStack;
 import net.pop1040.ProgrammingLanguage.FunctionStack.FunctionInstance;
 import net.pop1040.ProgrammingLanguage.Types.PClass;
 import net.pop1040.ProgrammingLanguage.Types.PGeneric;
+import net.pop1040.ProgrammingLanguage.Types.PObject;
+
+import static net.pop1040.ProgrammingLanguage.Tokens.Function.ArgumentType.ArgumentClass.*;
 
 public class Function implements Invokable{
 	
@@ -16,8 +19,59 @@ public class Function implements Invokable{
 	String name;
 	
 	ArrayList<String> argumentNames  = new ArrayList<String>();
-	ArrayList<PClass> argumentTypes  = new ArrayList<PClass>();
+	protected ArrayList<ArgumentType> argumentTypes  = new ArrayList<ArgumentType>();
 	//ArrayList<Evaluatable> arguments = new ArrayList<Evaluatable>();
+	
+	protected static class ArgumentType{
+		protected PClass clazz;
+		protected int genericIndex;
+		public ArgumentClass type;
+		
+		public ArgumentType(PClass type){
+			this.clazz = type;
+			this.type = CLASS;
+		}
+		
+		public ArgumentType(int index){
+			genericIndex = index;
+			this.type = GENERIC;
+		}
+		
+		
+		Object getTypename(PObject object){
+			return type.getTypename(this, object);
+		}
+		
+		public static enum ArgumentClass{
+			CLASS(){
+				@Override
+				public PClass getTypeClass(ArgumentType type, PObject object) {
+					return type.clazz;
+				}
+			},
+			GENERIC(){
+				@Override
+				public PClass getTypeClass(ArgumentType type, PObject object) {
+					return object.generics.get(type.genericIndex);
+				}
+				
+				@Override
+				public Object getTypename(ArgumentType type, PObject object) {
+					return Integer.valueOf(type.genericIndex);
+				}
+			};
+			
+			public Object getTypename(ArgumentType type, PObject object){
+				//PClass clazz = this.getTypeClass(type, object);
+				//return clazz == null ? type.genericIndex + "" : clazz.typeName;
+				return type.clazz.typeName;
+			}
+			public PClass getTypeClass(ArgumentType type, PObject object){
+				return null;
+			}
+			
+		}
+	}
 	
 	public Function(String name, Token executedToken, PClass returnType){
 		this.name=name;
@@ -39,9 +93,12 @@ public class Function implements Invokable{
 		return argumentNames.toArray(new String[argumentNames.size()]);
 	}
 	
-	public String[] getArgumentTypeNames(){
-		String[] names = new String[argumentTypes.size()];
-		for(int i=0; i<names.length; i++)names[i]=argumentTypes.get(i).typeName;
+	public Object[] getArgumentTypeNames(){
+		Object[] names = new Object[argumentTypes.size()];
+		for(int i=0; i<names.length; i++){
+			ArgumentType argType = argumentTypes.get(i);
+			names[i]=argType.type.getTypename(argType, null);
+		}
 		return names;
 	}
 
@@ -66,7 +123,7 @@ public class Function implements Invokable{
 	
 	public Function addArgument(String name, PClass type){
 		argumentNames.add(name);
-		argumentTypes.add(type);
+		argumentTypes.add(new ArgumentType(type));
 		return this;
 	}
 	

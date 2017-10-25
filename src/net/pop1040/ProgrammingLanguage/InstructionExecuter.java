@@ -125,7 +125,7 @@ public class InstructionExecuter {
 				if(currentToken instanceof Evaluatable){
 					if(cStackInstance.evaluationTree.isEmpty()){
 						if(currentToken instanceof ILoopable){
-							if(!((ILoopable) currentToken).shouldLoop(stack))index++; //TODO I LEFT OFF HERE
+							if(!((ILoopable) currentToken).shouldLoop(stack))index++;
 						}else index++;
 					}
 					else if(cStackInstance.evaluationTree.getLast().obj == currentToken){

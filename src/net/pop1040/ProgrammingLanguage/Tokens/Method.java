@@ -32,9 +32,22 @@ public class Method extends Function {
 	}
 	
 	public Method addArgument(String name, PClass type){
-		argumentNames.add(name);
-		argumentTypes.add(type);
+		super.addArgument(name, type);
 		return this;
+	}
+	public Method addArgument(String name, int genericTypeIndex){
+		argumentNames.add(name);
+		argumentTypes.add(new ArgumentType(genericTypeIndex));
+		return this;
+	}
+	
+	public Object[] getArgumentTypeNames(PObject object){
+		Object[] names = new String[argumentTypes.size()];
+		for(int i=0; i<names.length; i++){
+			ArgumentType argType = argumentTypes.get(i);
+			names[i]=argType.type.getTypename(argType, object);
+		}
+		return names;
 	}
 	
 	@Override

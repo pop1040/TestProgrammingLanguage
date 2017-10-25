@@ -3,10 +3,13 @@ package net.pop1040.ProgrammingLanguage.Tokens;
 import java.util.ArrayList;
 
 import net.pop1040.ProgrammingLanguage.FunctionStack;
-import net.pop1040.ProgrammingLanguage.Tokens.VariableReference.Type;
+import net.pop1040.ProgrammingLanguage.Types.PArray;
 import net.pop1040.ProgrammingLanguage.Types.PClass;
 import net.pop1040.ProgrammingLanguage.Types.PGeneric;
 import net.pop1040.ProgrammingLanguage.Types.PObject;
+import net.pop1040.ProgrammingLanguage.Types.PPrimitive;
+
+import static net.pop1040.ProgrammingLanguage.Tokens.VariableReference.Type.*;
 
 public class EvalGetVariable implements Evaluatable {
 	
@@ -23,15 +26,18 @@ public class EvalGetVariable implements Evaluatable {
 
 	@Override
 	public Evaluatable getNextEvaluatable(ArrayList<PClass> classes, ArrayList<PGeneric> evaluated) {
-		if(variableReference.mode == Type.FIELD && evaluated.size() == 0)return variableReference.object;
+		if((variableReference.mode == FIELD || variableReference.mode == ARRAY) && evaluated.size() == 0)return variableReference.object;
+		if(variableReference.mode == ARRAY && evaluated.size() == 1)return variableReference.index;
 		return null;
 	}
 
 	@Override
 	public PGeneric getReturnValue(FunctionStack stack, ArrayList<PGeneric> evaluated) {
-		if(variableReference.mode == Type.FIELD){
+		if(variableReference.mode == FIELD){
 			return ((PObject)evaluated.get(0)).fieldMap.get(variableReference.name);
-			//TODO handle object fields
+		}
+		if(variableReference.mode == ARRAY){
+			return ((PArray)evaluated.get(0)).value[((PPrimitive)evaluated.get(1)).getIntValue()];
 		}
 		return stack.getVariable(variableReference.name, false);
 	}

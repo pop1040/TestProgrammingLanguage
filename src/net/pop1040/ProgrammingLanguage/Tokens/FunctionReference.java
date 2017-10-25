@@ -13,19 +13,19 @@ public class FunctionReference {
 	
 	public Type mode;
 	public String functionName;
-	public String[] arguments;
+	public Object[] arguments;
 	public Evaluatable object;
 	public String className;
 	public PClass returnType;
 	
-	public FunctionReference(PClass clazz, String ... arguments) {
+	public FunctionReference(PClass clazz, Object ... arguments) {
 		this.mode = Type.CONSTRUCTOR;
 		this.className = clazz.typeName;
 		this.returnType = clazz;
 		this.arguments = arguments;
 	}
 	
-	public FunctionReference(String functionName, String className, PClass returnType, String ... arguments) {
+	public FunctionReference(String functionName, String className, PClass returnType, Object ... arguments) {
 		this.mode = Type.FUNCTION;
 		this.functionName = functionName;
 		this.className = className;
@@ -33,7 +33,7 @@ public class FunctionReference {
 		this.arguments = arguments;
 	}
 	
-	public FunctionReference(String functionName, Evaluatable object, PClass returnType, String ... arguments) {
+	public FunctionReference(String functionName, Evaluatable object, PClass returnType, Object ... arguments) {
 		this.mode = Type.METHOD;
 		this.functionName = functionName;
 		this.object = object;
@@ -41,7 +41,7 @@ public class FunctionReference {
 		this.arguments = arguments;
 	}
 	
-	public FunctionReference(String functionName, PClass returnType, String className, String ... arguments){
+	public FunctionReference(String functionName, PClass returnType, String className, Object ... arguments){
 		this.mode = Type.INTRINSIC;
 		this.functionName = functionName;
 		this.returnType = returnType;

@@ -148,6 +148,12 @@ public class TestRunner {
 		//File logFile = new File("log.txt");
 		//System.out.println(logFile.getAbsolutePath());
 		
+		//main.tokens.add(new TokenDeclareLocalVariable("a", PInteger.pClass, new EvalConstant(new PInteger(0))));
+		//main.tokens.add(new TokenEvalWhile(new EvalNotEqual(new EvalGetVariable(new VariableReference("a", PInteger.pClass)), new EvalConstant(new PInteger(10))), new TokenSetVarValue(new VariableReference("a", PInteger.pClass),  new EvalAddInteger(new EvalGetVariable(new VariableReference("a", PInteger.pClass)), new EvalConstant(new PInteger(1))))));
+		//main.tokens.add(new EvalInvokeFunction(new FunctionReference("println", "System", PClass.pVoid, PInteger.pClass.typeName), engine.classes, new EvalGetVariable(new VariableReference("a", PInteger.pClass))));
+		//main.tokens.add(new TokenEvalWhile(new EvalConstant(new PBoolean(true)), new Subroutine()));
+		
+		
 		//PrintStream fileOut = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFile), 67108864));
 		
 		//engine.initProgramData();

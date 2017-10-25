@@ -15,10 +15,6 @@ public class PChar extends PPrimitive {
 		this.value=value;
 	}
 	
-	@Override
-	public String getInstanceName() {
-		return null;
-	}
 
 	@Override
 	public PClass getPClass() {

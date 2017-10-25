@@ -18,8 +18,11 @@ public class Constructor extends Method {
 	}
 	
 	public Constructor addArgument(String name, PClass type){
-		argumentNames.add(name);
-		argumentTypes.add(type);
+		super.addArgument(name, type);
+		return this;
+	}
+	public Method addArgument(String name, int genericTypeIndex){
+		super.addArgument(name, genericTypeIndex);
 		return this;
 	}
 	

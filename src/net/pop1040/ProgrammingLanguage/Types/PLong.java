@@ -16,11 +16,6 @@ public class PLong extends PPrimitive {
 	}
 	
 	@Override
-	public String getInstanceName() {
-		return null;
-	}
-
-	@Override
 	public PClass getPClass() {
 		return pClass;
 	}

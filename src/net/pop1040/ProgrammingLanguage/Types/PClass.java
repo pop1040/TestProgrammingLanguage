@@ -22,6 +22,8 @@ public class PClass extends PObject {
 	public String typeName;
 	
 	public PClass superClass;
+	
+	public int genericCount;
 
 	public ArrayList<Function> functions = new ArrayList<Function>();
 	public ArrayList<String> functionNames = new ArrayList<String>();
@@ -40,7 +42,7 @@ public class PClass extends PObject {
 	
 	public HashMap<FuncKey, Constructor> constructors = new HashMap<FuncKey, Constructor>();
 	
-	public Constructor getConstructor(String[] arguments) {
+	public Constructor getConstructor(Object[] arguments) {
 		return constructors.get(new FuncKey("", arguments));
 	}
 	
@@ -73,9 +75,19 @@ public class PClass extends PObject {
 	}
 	
 	public PClass(String typeName) {
-		super(pClass);
+		super();
 		this.typeName=typeName;
+		this.genericCount = 0;
 	}
+	public PClass(String typeName, int genericCount) {
+		super();
+		this.typeName=typeName;
+		if(genericCount < 0)throw new IllegalArgumentException("cannot have negative generic count (class name = " + typeName + ")");
+		this.genericCount = genericCount;
+	}
+	
+	
+	
 	
 	@Override
 	public String toString() {
@@ -86,7 +98,9 @@ public class PClass extends PObject {
 	
 	
 	
-	
+	boolean hasGenerics(){
+		return genericCount > 0;
+	}
 
 	public Function[] getFunctionArray(){
 		return getFunctions().toArray(new Function[getFunctions().size()]);
@@ -169,7 +183,7 @@ public class PClass extends PObject {
 	 * the result of calling getFunction on that superclass, otherwise
 	 * null
 	 */
-	public Function getFunction(String functionName, String[] arguments) {
+	public Function getFunction(String functionName, Object[] arguments) {
 		Function func = functionMap.get(new FuncKey(functionName, arguments));
 		return func != null ? func : (superClass == null ? null : superClass.getFunction(functionName, arguments));
 	}
@@ -178,7 +192,7 @@ public class PClass extends PObject {
 	 * @param methodName
 	 * @return
 	 */
-	public Method getMethod(String methodName, String[] arguments) {
+	public Method getMethod(String methodName, Object[] arguments) {
 		Method mthd = methodMap.get(new FuncKey(methodName, arguments));
 		return mthd != null ? mthd : (superClass == null ? null : superClass.getMethod(methodName, arguments));
 	}
@@ -191,7 +205,7 @@ public class PClass extends PObject {
 	 * the result of calling getFunction on that superclass, otherwise
 	 * null
 	 */
-	public IIntrinsicFunction getIntrinsicFunction(String functionName, String[] arguments) {
+	public IIntrinsicFunction getIntrinsicFunction(String functionName, Object[] arguments) {
 		IIntrinsicFunction func = intrinsicFunctionMap.get(new FuncKey(functionName, arguments));
 		return func != null ? func : (superClass == null ? null : superClass.getIntrinsicFunction(functionName, arguments));
 	}
@@ -199,9 +213,9 @@ public class PClass extends PObject {
 	public static class FuncKey{
 		
 		String name;
-		String[] arguments;
+		Object[] arguments;
 		
-		public FuncKey(String name, String[] arguments) {
+		public FuncKey(String name, Object[] arguments) {
 			this.name = name;
 			this.arguments = arguments;
 		}
@@ -225,7 +239,7 @@ public class PClass extends PObject {
 			
 			if(arguments == null)return result;
 			
-			for( String s : arguments)result = result * prime + s.hashCode();
+			for(Object o : arguments)result = result * prime + o.hashCode();
 			
 			return result;
 		}

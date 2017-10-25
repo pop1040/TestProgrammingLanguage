@@ -19,11 +19,6 @@ public class PBoolean extends PPrimitive{
 	}
 
 	@Override
-	public String getInstanceName() {
-		return null;
-	}
-
-	@Override
 	public PClass getPClass() {
 		return pClass;
 	}

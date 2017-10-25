@@ -1,14 +1,26 @@
 package net.pop1040.ProgrammingLanguage.Types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class PObject extends PGeneric {
 	
 	private PClass pClass;
+	public ArrayList<PClass> generics = new ArrayList<PClass>();
 	
-	public PObject(PClass pClass) {
+	public PObject(PClass pClass, PClass ... generics) {
 		this.pClass=pClass;
+		if(pClass.hasGenerics()){
+			if(generics == null)throw new IllegalArgumentException("class " + pClass.typeName + " requires generics");
+			if(generics.length == 0)throw new IllegalArgumentException("class " + pClass.typeName + " requires generics");
+			if(generics.length != pClass.generics.size())throw new IllegalArgumentException("class " + pClass.typeName + " requires " + pClass.generics.size() + " generic class" + (pClass.generics.size()>1?"es":"") + " but " + generics.length + " were supplied");
+			this.generics.addAll(Arrays.asList(generics));
+		}else if(generics != null && generics.length > 0)throw new IllegalArgumentException("class " + pClass.typeName + " does not use generics");
+	}
+	
+	protected PObject(){
+		this.pClass = PClass.pClass;
 	}
 	
 
@@ -37,11 +49,6 @@ public class PObject extends PGeneric {
 		return getFields().toArray(new PGeneric[getFields().size()]);
 	}
 
-	@Override
-	public String getInstanceName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@Override
 	public String toString() {

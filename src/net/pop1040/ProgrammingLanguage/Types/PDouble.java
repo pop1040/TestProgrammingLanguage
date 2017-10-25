@@ -14,11 +14,6 @@ public class PDouble extends PPrimitive {
 	public PDouble(double value) {
 		this.value=value;
 	}
-	
-	@Override
-	public String getInstanceName() {
-		return null;
-	}
 
 	@Override
 	public PClass getPClass() {
