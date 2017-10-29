@@ -46,9 +46,8 @@ public class VariableReference{
 	 * @param type
 	 * @param object
 	 */
-	public VariableReference(String name, PClass type, Evaluatable object, Evaluatable index){
+	public VariableReference(PClass type, Evaluatable object, Evaluatable index){
 		this.mode=Type.ARRAY;
-		this.name=name;
 		this.type=type;
 		this.object=object;
 		this.index=index;
@@ -56,7 +55,7 @@ public class VariableReference{
 	
 	@Override
 	public String toString() {
-		return "VarRef[mode=" + mode.name() + ", name=" + name + ", type=" + type + (mode==Type.FIELD || mode==Type.ARRAY?", object=" + object:"") + (mode==Type.ARRAY?", index=" + index:"") + "]";
+		return "VarRef[mode=" + mode.name() + (mode==Type.ARRAY?"":", name=" + name) + ", type=" + type + (mode==Type.FIELD || mode==Type.ARRAY?", object=" + object:"") + (mode==Type.ARRAY?", index=" + index:"") + "]";
 	}
 	
 }

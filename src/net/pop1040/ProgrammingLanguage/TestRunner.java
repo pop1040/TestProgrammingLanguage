@@ -140,11 +140,19 @@ public class TestRunner {
 		
 		main.tokens.add(new TokenDeclareLocalVariable("carInstance", car, new EvalInvokeFunction(new FunctionReference(car, PInteger.pClass.typeName), engine.classes, new EvalConstant(new PInteger(113)))));
 		
+		//main.tokens.add(new Subroutine());
+		main.tokens.add(new TokenSetVarValue(new VariableReference("counter", PInteger.pClass), new EvalConstant(new PInteger(0))));
+		main.tokens.add(new TokenDeclareLocalVariable("test array", PArray.pClass, new EvalNewArray(new EvalConstant(new PInteger(16)), PInteger.pClass)));
+		{
+			Subroutine whileLoop = new Subroutine();
+			main.tokens.add(new TokenEvalWhile(new EvalLessThan(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalGetVariable(new VariableReference("length", PInteger.pClass, new EvalGetVariable(new VariableReference("test array", PArray.pClass))))), whileLoop));
+			whileLoop.tokens.add(new TokenSetVarValue(new VariableReference(PInteger.pClass, new EvalGetVariable(new VariableReference("test array", PArray.pClass)), new EvalGetVariable(new VariableReference("counter", PInteger.pClass))), new EvalMultiplyInteger(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalGetVariable(new VariableReference("counter", PInteger.pClass)))));
+			whileLoop.tokens.add(new TokenSetVarValue(new VariableReference("counter", PInteger.pClass), new EvalAddInteger(new EvalGetVariable(new VariableReference("counter", PInteger.pClass)), new EvalConstant(new PInteger(1)))));
+		}
 		
+
 		main.tokens.add(new EvalInvokeFunction(new FunctionReference("exit", null, "System", PInteger.pClass.typeName), engine.classes, new EvalConstant(new PInteger(1))));
 		main.tokens.add(new TokenSetVarValue(new VariableReference("x", PInteger.pClass), new EvalConstant(new PInteger(99999))));
-		//main.tokens.add(new Subroutine());
-		
 		//File logFile = new File("log.txt");
 		//System.out.println(logFile.getAbsolutePath());
 		

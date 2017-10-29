@@ -14,7 +14,7 @@ public class PObject extends PGeneric {
 		if(pClass.hasGenerics()){
 			if(generics == null)throw new IllegalArgumentException("class " + pClass.typeName + " requires generics");
 			if(generics.length == 0)throw new IllegalArgumentException("class " + pClass.typeName + " requires generics");
-			if(generics.length != pClass.generics.size())throw new IllegalArgumentException("class " + pClass.typeName + " requires " + pClass.generics.size() + " generic class" + (pClass.generics.size()>1?"es":"") + " but " + generics.length + " were supplied");
+			if(generics.length != pClass.genericCount)throw new IllegalArgumentException("class " + pClass.typeName + " requires " + pClass.genericCount + " generic classes" + (pClass.genericCount!=1?"es":"") + " but " + (generics.length == 1 ? "1 was supplied" : generics.length + " were supplied"));
 			this.generics.addAll(Arrays.asList(generics));
 		}else if(generics != null && generics.length > 0)throw new IllegalArgumentException("class " + pClass.typeName + " does not use generics");
 	}
