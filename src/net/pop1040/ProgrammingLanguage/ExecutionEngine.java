@@ -48,13 +48,13 @@ public class ExecutionEngine {
 		return baseClasses;
 	}
 	private void exit(int code) {
-		instructionPointer.haulted=true;
+		instructionPointer.halted=true;
 		exitCode = code;
 	}
-	ArrayList<PClass> classes = new ArrayList<PClass>();
+	public ArrayList<PClass> classes = new ArrayList<PClass>();
 	PClass startingClass;
-	FunctionStack stack;
-	InstructionExecuter instructionPointer;
+	public FunctionStack stack;
+	public InstructionExecuter instructionPointer;
 	
 	
 	

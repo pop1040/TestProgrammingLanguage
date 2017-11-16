@@ -22,7 +22,7 @@ public class InstructionExecuter {
 	//HashMap<Evaluatable, ArrayList<PGeneric>> evaluationTreeData = new HashMap<Evaluatable, ArrayList<PGeneric>>();
 	ExecutionEngine executionEngine;
 	
-	boolean haulted=false;
+	public boolean halted=false;
 
 	public InstructionExecuter(FunctionStack stack, ExecutionEngine executionEngine) {
 		this.stack=stack;
@@ -39,7 +39,7 @@ public class InstructionExecuter {
 	}*/
 
 	public void step() {
-		if(haulted)return;
+		if(halted)return;
 		FunctionInstance cStackInstance = stack.stack.getLast();
 		
 		int index = cStackInstance.execIndex;
@@ -141,7 +141,7 @@ public class InstructionExecuter {
 				removeDepth--;
 				stack.stack.removeLast();
 				if(stack.stack.isEmpty()){
-					haulted = true;
+					halted = true;
 					return;
 				}
 			}

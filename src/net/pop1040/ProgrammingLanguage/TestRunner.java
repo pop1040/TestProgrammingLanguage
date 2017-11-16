@@ -114,7 +114,6 @@ public class TestRunner {
 		evalYes.tokens.add(new TokenSetVarValue(new VariableReference("result", PChar.pClass), new EvalConstant(new PChar('T'))));
 		evalNo.tokens.add(new TokenSetVarValue(new VariableReference("result", PChar.pClass), new EvalConstant(new PChar('F'))));
 		
-		
 		main.tokens.add(new TokenDeclareLocalVariable("x", PInteger.pClass, new EvalConstant(new PInteger(7))));
 		main.tokens.add(new TokenDeclareLocalVariable("global t", PInteger.pClass, new EvalConstant(new PInteger(-1))));
 		main.tokens.add(new TokenDeclareLocalVariable("result", PChar.pClass, new EvalConstant(new PChar('U'))));
@@ -171,7 +170,7 @@ public class TestRunner {
 		//engine.dumpState(fileOut);
 		
 		long time = System.currentTimeMillis();
-		while(!engine.instructionPointer.haulted){
+		while(!engine.instructionPointer.halted){
 			//System.out.println("<----------------- Step " + counter + " ----------------> (Took " + (System.currentTimeMillis()-time) + " milliseconds)");
 			engine.step();
 			//if(counter%100==0){
@@ -188,7 +187,7 @@ public class TestRunner {
 			//if(counter == 135){
 			//	System.out.println("<--------------Done! Took " + (System.currentTimeMillis()-time) + " milliseconds-------------->");
 				System.out.println("<----------------- Step " + counter + " ---------------->");
-				if(engine.instructionPointer.haulted)System.out.println("<--------------Done! Took " + (System.currentTimeMillis()-time) + " milliseconds (exit code = " + engine.exitCode + ")-------------->");
+				if(engine.instructionPointer.halted)System.out.println("<--------------Done! Took " + (System.currentTimeMillis()-time) + " milliseconds (exit code = " + engine.exitCode + ")-------------->");
 				engine.dumpState(System.out);
 			//}
 			counter++;
